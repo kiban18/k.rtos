@@ -1,12 +1,33 @@
-
 #include <kernel.h>
+#include <scheduler.h>
+#include <task.h>
+#include <interrupt.h>
+#include <timer.h>
 
 
 unsigned int idle_count;
 volatile unsigned int * const UART0DR = (unsigned int *)0x101f1000;
 volatile unsigned int * const TEST = (unsigned int *)0xffffffff;
 
+int KernelMain(void) {
+    printf("\n\n\nStart NOOS RTOS kernel...............\n");
 
+    InitScheduler();
+    InitTask();
+    //InitInterrupt();
+    //InitTick();
+    //InitTimer();
+
+    TaskInit(&initTask, InitTaskMain, 0, CONFIG_MAX_PRIORITY - 1, initStack, sizeof(initStack));
+
+
+    while (1) {
+        /* task idle */
+        continue;
+    }
+
+    return 0;
+}
 
 int kernel_main(void) {
 	print_uart0("Hello world!\n");

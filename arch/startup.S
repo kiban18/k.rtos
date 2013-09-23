@@ -11,7 +11,7 @@
 .extern exception_stack
 .extern idle_stack
 .extern uart_putc
-.extern kernel_main
+.extern KernelMain
 .extern Clock_Controller_ASM_Init
 .extern DDR2_SDRAM_ASM_Init
 .extern UART0_ASM_Init
@@ -91,7 +91,7 @@ resetHandler:
 
     /* start kernel main */
     mov     lr, pc
-    ldr     pc, =kernel_main
+    ldr     pc, =KernelMain
     b       .
 	
 

@@ -1,9 +1,13 @@
 #ifndef __KERNEL_H__
 #define __KERNEL_H__
 
-#define CONFIG_TASK_STACK_SIZE      8192
-#define CONFIG_EXCEPT_STACK_SIZE    8192
-#define CONFIG_MAX_PRIORITY         64
+#define CONFIG_TASK_STACK_SIZE              8192
+#define CONFIG_EXCEPT_STACK_SIZE            8192
+#define CONFIG_MAX_PRIORITY                 256
+#define CONFIG_TICK_CLOCK                   10000 // us
+#define CONFIG_SCHED_TIME_QUANTUM           10
+
+
 
 #define __REG(reg)  (*(volatile unsigned int *)(reg))
 

@@ -40,10 +40,10 @@
 #define	DMA_B_BASE       0xe9200000
 #define	DMA_D_BASE       0x0
 
-#define	TIMER_BASE       0xea000000,
-#define	SYSTIMER_BASE    0xea100000,
-#define	WDT_BASE         0xea200000,
-#define	RTC_BASE         0xea300000,
+#define	TIMER_BASE       0xea000000
+#define	SYSTIMER_BASE    0xea100000
+#define	WDT_BASE         0xea200000
+#define	RTC_BASE         0xea300000
 
 #define	UART_A_BASE      0xec000000
 #define	UART_B_BASE      0xec000400
