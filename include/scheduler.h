@@ -1,9 +1,10 @@
-
 #ifndef __SCHEDULER_H__
 #define __SCHEDULER_H__
 
 #include <kernel.h>
 #include <task.h>
+
+
 #define SCHED_TIME_QUANTUM   CONFIG_SCHED_TIME_QUANTUM
 
 
@@ -47,5 +48,3 @@ int TaskWakeupAll(struct TaskQStruct *waitQ);
 
 
 #endif /* __SCHEDULER_H__ end. */
-
-

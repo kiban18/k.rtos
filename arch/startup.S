@@ -266,7 +266,7 @@ init_stack:
     /* setup idle task stack */
     mov     r1, #0xC0 | 0x13
     msr     cpsr,r1
-    ldr     r0, =idle_stack
+    ldr     r0, =idleStack
     ldr     r1, =CONFIG_TASK_STACK_SIZE
     add     r0, r0, r1
     sub     r0, r0, #4
