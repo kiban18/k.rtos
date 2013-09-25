@@ -17,12 +17,24 @@ void InitScheduler(void) {
 
 
 struct TaskStruct *TaskSelect(void) {
+	struct TaskStruct *task = &idleTask;
+	int i;
+
+	for (i=CONFIG_MAX_PRIORITY-1; i>=0; i--) {
+		if (readyQ[i].next != (struct TaskStruct *)&readyQ[i]) {
+			task = readyQ[i].next;
+			break;
+		}
+	}
+
+	return task;
+	/*
 	struct TaskStruct *task;
 	struct TaskStruc *curTask;
 	unsigned int flag;
 	int i;
 
-	for (i=0; i<CONFIG_MAX_PRIORITY; i++) {
+	for (i=CONFIG_MAX_PRIORITY-1; i>=0; i--) {
 		for (task=readyQ[i].next; task!=(struct TaskStruct *)readyQ; task=curTask) {
 			curTask = task->next;
 
@@ -31,6 +43,7 @@ struct TaskStruct *TaskSelect(void) {
 	}
 
 	return 0;
+	*/
 }
 
 
@@ -167,7 +180,7 @@ void DoScheduling(void) {
 	current = currentTask;
 	currentTask = TaskSelect();
 
-	if (currentTask = current) {
+	if (currentTask == current) {
 		return;
 	}
 

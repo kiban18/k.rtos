@@ -1,6 +1,9 @@
 cscope.files
 cscope.out
 tags
+GTAGS
+GRTAGS
+GPATH
 *.map
 *.elf
 *.img

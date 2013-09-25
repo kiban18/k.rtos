@@ -3,6 +3,7 @@
 
 #define CONFIG_TASK_STACK_SIZE              8192
 #define CONFIG_EXCEPT_STACK_SIZE            8192
+//#define CONFIG_MAX_PRIORITY                 2
 #define CONFIG_MAX_PRIORITY                 256
 #define CONFIG_TICK_CLOCK                   10000 // us
 #define CONFIG_SCHED_TIME_QUANTUM           10

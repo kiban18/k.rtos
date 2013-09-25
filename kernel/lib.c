@@ -154,7 +154,8 @@ void printf(const char *fmt, ...) {
 
 	va_start(args, fmt);
 	vsprintf(str, fmt, args);
-	puts(str);
+	//puts(str);
+    print_uart0(str);
 }
 
 
