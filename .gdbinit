@@ -1,9 +1,9 @@
 target remote localhost:1234
 file rtos.elf
 
-b KernelMain
-b TaskExit
+b DoScheduling
+b InitTaskMain
+b ContextSwitch
 
-display currentTask
-
-watch currentTask
+display/x $cpsr
+display   currentTask

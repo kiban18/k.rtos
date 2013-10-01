@@ -1,6 +1,9 @@
 #ifndef __KERNEL_H__
 #define __KERNEL_H__
 
+
+#define USE_BITMAP
+
 #define CONFIG_TASK_STACK_SIZE              8192
 #define CONFIG_EXCEPT_STACK_SIZE            8192
 #define CONFIG_MAX_PRIORITY                 256

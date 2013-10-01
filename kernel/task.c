@@ -11,7 +11,6 @@ unsigned char initStack[CONFIG_TASK_STACK_SIZE];
 
 int InitTask(void) {
 	struct TaskStruct *task = &idleTask;
-	int flag;
 
 	task->prio = 0;
 	task->state = TASK_STATE_READY;
@@ -24,18 +23,18 @@ int InitTask(void) {
 	task->args = 0;
 
 	task->id = (unsigned int)task;
+
 	TaskEnqueue(task);
 
 	return 0;
 }
 
 
-int TaskInit(struct TaskStruct *task, int (*StartFunction)(void *), void *args, unsigned int prio,
+int TaskInit(struct TaskStruct *task, int (*StartFunction)(void *), void *args, unsigned int prio, unsigned int timeQuantum,
                 unsigned char *stackAddr, unsigned int stackSize) {
-	int flag;
-
 	task->prio = prio;
 	task->state = TASK_STATE_READY;
+	task->timeQuantum = task->count = timeQuantum;
 
 	task->stackAddr = stackAddr;
 	task->stackPoint = task->stackAddr + stackSize - sizeof(struct ContextFrame);
@@ -78,8 +77,7 @@ void TaskInitContext(struct TaskStruct *task) {
 
 
 int TaskExit(void) {
-	unsigned int flag;
-
+	printf("********************[TaskExit] for task %d\n", currentTask->timeQuantum);
 	TaskDequeue(currentTask);
 	currentTask->id = 0;
 	DoScheduling();
@@ -94,8 +92,6 @@ struct TaskStruct *TaskGetID(void) {
 
 
 int TaskYield(void) {
-	int flag;
-
 	TaskDequeue(currentTask);
 	TaskEnqueue(currentTask);
 	DoScheduling();
@@ -110,8 +106,6 @@ int TaskGetPriority(struct TaskStruct *task) {
 
 
 int TaskSetPriority(struct TaskStruct *task, unsigned int prio) {
-	int flag;
-
 	if (task->state & TASK_STATE_READY) {
 		TaskDequeue(task);
 		task->prio = prio;

@@ -8,6 +8,7 @@
 #define BUFFER_SIZE         1024
 
 
+extern void print_uart0(const char *s);
 /*
  * DECLARES INTERNEL FUNCTIONS
  */
@@ -155,7 +156,7 @@ void printf(const char *fmt, ...) {
 	va_start(args, fmt);
 	vsprintf(str, fmt, args);
 	//puts(str);
-    print_uart0(str);
+	print_uart0(str);
 }
 
 

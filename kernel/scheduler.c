@@ -2,6 +2,80 @@
 #include <scheduler.h>
 
 
+#ifdef USE_BITMAP
+
+#define BITS_PER_BYTE		8
+#define BITS_PER_INTEGER	(sizeof(int) * BITS_PER_BYTE)
+#define BIT_MASK(prio)		(1 << ((prio) % BITS_PER_INTEGER))
+#define BIT_WORD(prio)		((prio) / BITS_PER_INTEGER)
+
+
+void __set_bit(int prio, unsigned int *bitmap) {
+	unsigned int mask = BIT_MASK(prio);
+	unsigned int *p = ((unsigned int *)bitmap) + BIT_WORD(prio);
+	*p |= mask;
+}
+
+
+void __clear_bit(int prio, unsigned int *bitmap) {
+	unsigned int mask = BIT_MASK(prio);
+	unsigned int *p = ((unsigned int *)bitmap) + BIT_WORD(prio);
+	*p &= ~mask;
+}
+
+
+int __ffs(const unsigned int b) {
+	unsigned int x = b;
+	int r = 32;
+
+	if (!x)
+		return 0;
+	if (!(x & 0xffff0000u)) {
+		x <<= 16;
+		r -= 16;
+	}
+	if (!(x & 0xff000000u)) {
+		x <<= 8;
+		r -= 8;
+	}
+	if (!(x & 0xf0000000u)) {
+		x <<= 4;
+		r -= 4;
+	}
+	if (!(x & 0xc0000000u)) {
+		x <<= 2;
+		r -= 2;
+	}
+	if (!(x & 0x80000000u)) {
+		x <<= 1;
+		r -= 1;
+	}
+	return r - 1;
+}
+
+
+int sched_find_first_bit(const unsigned int *b) {
+	if (b[7])
+		return __ffs(b[7]) + 224;
+	if (b[6])
+		return __ffs(b[6]) + 192;
+	if (b[5])
+		return __ffs(b[5]) + 160;
+	if (b[4])
+		return __ffs(b[4]) + 128;
+	if (b[3])
+		return __ffs(b[3]) + 96; 
+	if (b[2])
+		return __ffs(b[2]) + 64; 
+	if (b[1])
+		return __ffs(b[1]) + 32; 
+	return __ffs(b[0]);
+}
+
+
+unsigned int bitmap[8];
+#else // USE_BITMAP
+#endif // USE_BITMAP
 struct TaskQStruct readyQ[CONFIG_MAX_PRIORITY];
 struct TaskStruct *currentTask = &idleTask;
 
@@ -18,32 +92,24 @@ void InitScheduler(void) {
 
 struct TaskStruct *TaskSelect(void) {
 	struct TaskStruct *task = &idleTask;
-	int i;
 
+#ifdef USE_BITMAP
+	int prio = sched_find_first_bit(bitmap);
+	printf("sched_find_first_bit( 0x%08x, 0x%08x, 0x%08x, 0x%08x, 0x%08x, 0x%08x, 0x%08x, 0x%08x ) returns %d\n",
+			bitmap[7], bitmap[6], bitmap[5], bitmap[4],
+			bitmap[3], bitmap[2], bitmap[1], bitmap[0], prio);
+	task = readyQ[prio].next;
+#else // USE_BITMAP
+	int i;
 	for (i=CONFIG_MAX_PRIORITY-1; i>=0; i--) {
 		if (readyQ[i].next != (struct TaskStruct *)&readyQ[i]) {
 			task = readyQ[i].next;
 			break;
 		}
 	}
+#endif // USE_BITMAP
 
 	return task;
-	/*
-	struct TaskStruct *task;
-	struct TaskStruc *curTask;
-	unsigned int flag;
-	int i;
-
-	for (i=CONFIG_MAX_PRIORITY-1; i>=0; i--) {
-		for (task=readyQ[i].next; task!=(struct TaskStruct *)readyQ; task=curTask) {
-			curTask = task->next;
-
-			return task;
-		}
-	}
-
-	return 0;
-	*/
 }
 
 
@@ -52,6 +118,7 @@ int TaskEnqueue(struct TaskStruct *task) {
 	task->prev = (struct TaskStruct *)(&readyQ[task->prio])->prev;
 	readyQ[task->prio].prev->next = task;
 	readyQ[task->prio].prev = task;
+	__set_bit(task->prio, bitmap);
 
 	return 0;
 }
@@ -60,6 +127,7 @@ int TaskEnqueue(struct TaskStruct *task) {
 int TaskDequeue(struct TaskStruct *task) {
 	task->prev->next = task->next;
 	task->next->prev = task->prev;
+	__clear_bit(task->prio, bitmap);
 
 	return 0;
 }
@@ -177,8 +245,19 @@ void ContextSwitch(struct TaskStruct *currentTask, struct TaskStruct *nextTask) 
 void DoScheduling(void) {
 	struct TaskStruct *current;
 
+	printf("[DoScheduling] ..................................\n");
 	current = currentTask;
+	/*
+	if (current->count == 0) {
+		TaskDequeue(current);
+		current->count = current->timeQuantum;
+		TaskEnqueue(current);
+	}
+	*/
 	currentTask = TaskSelect();
+
+	unsigned int loop;
+	for (loop=0x0fffffffu; loop>0; loop--);
 
 	if (currentTask == current) {
 		return;
