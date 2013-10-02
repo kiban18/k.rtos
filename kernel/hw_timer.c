@@ -1,3 +1,4 @@
+#include <config.h>
 #include <kernel.h>
 #include <sfr_base.h>
 #include <typedef.h>
@@ -7,6 +8,7 @@
 #include <timer.h>
 #include <hw_timer.h>
 
+
 #define tmrOutp32(a, d) Outp32(a, d)
 #define tmrInp32(a, d) Inp32(a, d)
 #define tmrOutp16(a, d) Outp16(a, d)
@@ -14,7 +16,9 @@
 #define tmrOutp8(a, d) Outp8(a, d)
 #define tmrInp8(a, d) Inp8(a, d)
 
+
 #define uTimerPclkFreq g_uPclk1Freq
+
 
 #ifndef TIMER_SPEC_VER1
 #define MAX_TIMER_CNT 0x7fffffff

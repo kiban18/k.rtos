@@ -1,3 +1,4 @@
+#include <config.h>
 #include <kernel.h>
 #include <task.h>
 #include <interrupt.h>
@@ -36,6 +37,9 @@ int TaskInit(struct TaskStruct *task, int (*StartFunction)(void *), void *args, 
 	task->state = TASK_STATE_READY;
 	task->timeQuantum = task->count = timeQuantum;
 
+#if defined(_DEBUG_SHOW_TASK_SCHED_BY_YIELD_) || defined (_DEBUG_SHOW_TASK_SCHED_ROUND_ROBIN_)
+    printf("[TaskInit] task->count:%d, task->timeQuantum:%d\n", task->count, task->timeQuantum);
+#endif // DEBUG
 	task->stackAddr = stackAddr;
 	task->stackPoint = task->stackAddr + stackSize - sizeof(struct ContextFrame);
 	task->stackSize = stackSize;
@@ -77,7 +81,9 @@ void TaskInitContext(struct TaskStruct *task) {
 
 
 int TaskExit(void) {
-	printf("********************[TaskExit] for task %d\n", currentTask->timeQuantum);
+#if defined(_DEBUG_SHOW_TASK_SCHED_BY_YIELD_) || defined (_DEBUG_SHOW_TASK_SCHED_ROUND_ROBIN_)
+	printf("[TaskExit] task(%d)\n", currentTask->timeQuantum);
+#endif // DEBUG
 	TaskDequeue(currentTask);
 	currentTask->id = 0;
 	DoScheduling();
@@ -92,6 +98,9 @@ struct TaskStruct *TaskGetID(void) {
 
 
 int TaskYield(void) {
+#if defined(_DEBUG_SHOW_TASK_SCHED_BY_YIELD_) || defined (_DEBUG_SHOW_TASK_SCHED_ROUND_ROBIN_)
+    printf("[TaskYield] task(%d)\n", currentTask->timeQuantum);
+#endif // DEBUG
 	TaskDequeue(currentTask);
 	TaskEnqueue(currentTask);
 	DoScheduling();

@@ -1,5 +1,4 @@
-/* vi: set ts=4 sw=4 sts=4 expandtab: */
-
+#include <config.h>
 #include <kernel.h>
 #include <vsprintf.h>
 
@@ -168,6 +167,4 @@ void delay(unsigned int cnt) {
 void raise(void) {
     printf("error: raise()\n");
 }
-
-
 

@@ -25,15 +25,15 @@
 #define UART0_ICR (*((volatile unsigned int *)(UART0_BASE_ADDR + 0x044)))
 
 extern unsigned char exceptStack[CONFIG_EXCEPT_STACK_SIZE];
-extern void (*isrTable[96])(void);
-extern volatile unsigned int systemTick;
+extern void (*isrTable[32])(unsigned int);
+//extern volatile unsigned int systemTick;
 
 
 void InitInterrupt(void);
 unsigned int IntSaveDisableIRQ(void);
 void IntRestoreIRQ(unsigned int flag);
 void IntEnable(void);
-void IntUnknownHandler(void);
+void IntUnknownHandler(unsigned int);
 void IntSetHandler(int intNum, void (*handler)(void));
 void IntSetHandlerAndUnmask(int intNum, void (*handler)(void));
 void IntUnmask(int intNum);

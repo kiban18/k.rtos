@@ -9,3 +9,4 @@ GPATH
 *.img
 *.o
 *.swp
+*.log

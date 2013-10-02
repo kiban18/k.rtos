@@ -1,5 +1,10 @@
 #!/bin/bash
 
+rm -rf tags
+rm -rf cscope.*
+rm -rf GPATH GRTAGS GTAGS
+
+
 ctags -R
 
 rm -rf ./cscope.files ./cscope.out
