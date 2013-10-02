@@ -119,16 +119,21 @@ struct TaskStruct *TaskSelect(void) {
 
 
 void printWaitQ(struct TaskQStruct *q) {
-    int i;
+    int isExist = 0;
     struct TaskStruct *task;
 #if defined(_DEBUG_SHOW_TASK_SCHED_BY_YIELD_) || defined(_DEBUG_SHOW_TASK_SCHED_ROUND_ROBIN_)
-    printf("[printWaitQ] ::::::::::::::::::::::::::::::::::::::::::::::\n");
     task = q->next;
+    if (task != (struct TaskStruct *)q) {
+        isExist = 1;
+    }
+    if (isExist)
+        printf("[printWaitQ] :::::::::::::::::::::::::::::::::::\n");
     while (task != (struct TaskStruct *)q) {
-        printf("             ::::: prio(%3d) task(%3d) :::::\n", i, task->timeQuantum);
+        printf("                 ::::: prio(%3d) task(%3d) :::::\n", task->prio, task->timeQuantum);
         task = task->next;
     }
-    printf("::::::::::::::::::::::::::::::::::::::::::::::\n");
+    if (isExist)
+        printf("::::::::::::::::::::::::::::::::::::::::::::::::\n");
 #endif // DEBUG
 }
 
@@ -137,7 +142,7 @@ void printAllReadyQ() {
     int i;
     struct TaskStruct *task;
 #if defined(_DEBUG_SHOW_TASK_SCHED_BY_YIELD_) || defined(_DEBUG_SHOW_TASK_SCHED_ROUND_ROBIN_)
-    printf("[printAllReadyQ] ================================================\n");
+    printf("[printAllReadyQ] ===============================\n");
     for (i=CONFIG_MAX_PRIORITY-1; i>=0; i--) {
         task = readyQ[i].next;
         while (task != (struct TaskStruct *)&readyQ[i]) {
