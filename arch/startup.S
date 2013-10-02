@@ -70,28 +70,66 @@ dataAbtHandler:
 
 
 irqHandler:
-    /* context save */
     subs    lr,lr,#4
-    stmfd   sp!,{r0-r12,lr}
+    str     r0, [sp, #-0x4]!
+    str     r1, [sp, #-0x4]!
+    str     lr, [sp, #-0x4]!
     mrs     r0, spsr
-    stmfd   sp!, {r0}
+    str     r0, [sp, #-0x4]!
+    mov     r0, sp
+    add     sp, sp, #0x10
 
-    /* mode change (SVC mode) */
-    mov     r0, #0xC0 | 0x13
-    msr     cpsr, r0
+    /* change SVC mode */
+    mov     r1, #0xC0 | 0x13
+    msr     cpsr, r1
+
+    /* context save */
+    ldr     r1, [r0, #0x4]      @pc
+    str     r1, [sp, #-0x4]!
+    ldr     r1, [r0]            @cpsr
+    str     r1, [sp, #-0x4]!
+    str     lr, [sp, #-0x4]!
+    str     r12,[sp, #-0x4]!
+    str     r11,[sp, #-0x4]!
+    str     r10,[sp, #-0x4]!
+    str     r9, [sp, #-0x4]!
+    str     r8, [sp, #-0x4]!
+    str     r7, [sp, #-0x4]!
+    str     r6, [sp, #-0x4]!
+    str     r5, [sp, #-0x4]!
+    str     r4, [sp, #-0x4]!
+    str     r3, [sp, #-0x4]!
+    str     r2, [sp, #-0x4]!
+    ldr     r2, [r0, #0x8]
+    str     r2, [sp, #-0x4]!    @r1
+    mov     r3, r0
+    ldr     r2, [r3, #0xC]
+    str     r2, [sp, #-0x4]!    @r0
 
     /* call common handler */
     mov     lr, pc
     ldr     pc, =interrupt_request
 
-    /* mode change (IRQ mode & int disable) */
-    mov     r0, #0xC0 | 0x12
-    msr     cpsr, r0
-
     /* context restore */
-    ldmfd   sp!, {r0}
-    msr     spsr, r0
-    ldmfd   sp!,{r0-r12,pc}^
+    ldr     r10,[sp, #56]
+    msr     cpsr, r10
+    ldr     r0, [sp], #0x4
+    ldr     r0, [sp], #0x4
+    ldr     r0, [sp], #0x4
+    ldr     r0, [sp], #0x4
+    ldr     r0, [sp], #0x4
+    ldr     r0, [sp], #0x4
+    ldr     r0, [sp], #0x4
+    ldr     r0, [sp], #0x4
+    ldr     r0, [sp], #0x4
+    ldr     r0, [sp], #0x4
+    ldr     r10,[sp], #0x4
+    ldr     r10,[sp], #0x4
+    ldr     r10,[sp], #0x4
+    ldr     lr, [sp], #0x4
+    add     sp, sp, #4
+    ldr     pc, [sp], #0x4
+
 
 fiqHandler:
     mov     lr, pc
