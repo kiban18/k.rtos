@@ -24,7 +24,7 @@ int TimerInit(struct TimerStruct *timer, unsigned int timeOut, void (*Handler)(v
 
     flag = IntSaveDisableIRQ();
 
-#if defined(_USE_SORTED_LIST)
+#if defined(_USE_SORTED_LIST_)
     struct TimerStruct *cur = timerList.next;
     while(1) {
         if (cur == (struct TimerStruct *)&timerList) {
