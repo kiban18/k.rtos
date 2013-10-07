@@ -21,16 +21,16 @@
 #define TIMER_INTERVAL_1    31
 #define TIMER_INTERVAL_2    22
 #define TIMER_INTERVAL_3    13
-#define TIMER_INTERVAL_4    4
+#define TIMER_INTERVAL_4    04
 
 #define TASK_QUANTUM_0      5
 #define TASK_QUANTUM_1      7
 #define TASK_QUANTUM_2      3
-#define TASK_QUANTUM_3      2
-#define TASK_QUANTUM_4      4
-#define TASK_QUANTUM_5      2
-#define TASK_QUANTUM_6      4
-#define TASK_QUANTUM_7      5
+#define TASK_QUANTUM_3      1
+#define TASK_QUANTUM_4      2
+#define TASK_QUANTUM_5      1
+#define TASK_QUANTUM_6      2
+#define TASK_QUANTUM_7      3
 
 
 int Task0Main(void *args);
@@ -57,7 +57,9 @@ int Task0Main(void *args) {
         for (loop=SHORT_DELAY_LOOP_COUNT; loop>0; loop--);
 //#endif
 
+#if !defined(_DEBUG_SHOW_TIMER_SORTED_LIST_)
         printf("\n[Task0Main] running\n");
+#endif
 #if defined(_SHOW_TASK_SCHED_BY_YIELD_)
         TaskYield();
 #endif
@@ -74,7 +76,9 @@ int Task1Main(void *args) {
         for (loop=SHORT_DELAY_LOOP_COUNT; loop>0; loop--);
 //#endif
 
+#if !defined(_DEBUG_SHOW_TIMER_SORTED_LIST_)
         printf("\n[Task1Main] running\n");
+#endif
 #if defined(_SHOW_TASK_SCHED_BY_YIELD_)
         TaskYield();
 #endif
@@ -91,7 +95,9 @@ int Task2Main(void *args) {
         for (loop=SHORT_DELAY_LOOP_COUNT; loop>0; loop--);
 //#endif
 
+#if !defined(_DEBUG_SHOW_TIMER_SORTED_LIST_)
         printf("\n[Task2Main] running\n");
+#endif
 #if defined(_SHOW_TASK_SCHED_BY_YIELD_)
         TaskYield();
 #endif

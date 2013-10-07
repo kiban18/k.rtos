@@ -15,6 +15,7 @@ int InitTask(void) {
 
 	task->prio = 0;
 	task->state = TASK_STATE_READY;
+	task->timeQuantum = task->count = 10;
 
 	task->stackAddr = idleStack;
 	task->stackPoint = 0;

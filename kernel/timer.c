@@ -97,7 +97,7 @@ void TickHandler(unsigned int irq) {
 #endif
 
 #if defined(_SHOW_TASK_SCHED_ROUND_ROBIN_)
-#if defined(_DEBUG_SHOW_TASK_SCHED_ROUND_ROBIN_)
+#if defined(_DEBUG_SHOW_TASK_SCHED_ROUND_ROBIN_) && !defined(_DEBUG_SHOW_TIMER_SORTED_LIST_)
     printf("[TickHandler] currentTask(%d)->count(%3d)\n", currentTask->timeQuantum, currentTask->count);
 #endif // DEBUG
     if (!currentTask->count--) {
