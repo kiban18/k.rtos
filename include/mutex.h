@@ -21,4 +21,3 @@ int MutexUnlock(struct MutexStruct *mutex);
 
 #endif /* __MUTEX_H__ end. */
 
-

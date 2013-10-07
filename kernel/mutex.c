@@ -11,7 +11,7 @@ int MutexInit(struct MutexStruct *mutex, unsigned int cPrio) {
     mutex->waitQ.next = (struct TaskStruct *)(&mutex->waitQ);
     mutex->waitQ.prev = (struct TaskStruct *)(&mutex->waitQ);
 
-#if defined (_DEBUG_SHOW_SEMAPHORE_USING_MUTEX_)
+#if defined (_DEBUG_SHOW_MUTEX_)
     printf("**************************************** [MutexInit] mutex(0x%08x) is initialized\n", mutex);
 #endif // DEBUG
 
@@ -25,7 +25,7 @@ int MutexLock(struct MutexStruct *mutex) {
     flag = IntSaveDisableIRQ();
 
     while (mutex->lock) {
-#if defined (_DEBUG_SHOW_SEMAPHORE_USING_MUTEX_)
+#if defined (_DEBUG_SHOW_MUTEX_)
         printf("**************************************** [MutexLock] mutex(0x%08x) is already locked by owner(%d), this task(%d) is Waiting\n",
                 mutex, mutex->owner->timeQuantum, currentTask->timeQuantum);
 #endif // DEBUG
@@ -39,7 +39,7 @@ int MutexLock(struct MutexStruct *mutex) {
 
     IntRestoreIRQ(flag);
 
-#if defined (_DEBUG_SHOW_SEMAPHORE_USING_MUTEX_)
+#if defined (_DEBUG_SHOW_MUTEX_)
     printf("**************************************** [MutexLock] this task(%d) is locking mutex(0x%08x)\n", currentTask->timeQuantum, mutex);
 #endif // DEBUG
 
@@ -50,7 +50,7 @@ int MutexLock(struct MutexStruct *mutex) {
 int MutexUnlock(struct MutexStruct *mutex) {
     unsigned int flag;
 
-#if defined (_DEBUG_SHOW_SEMAPHORE_USING_MUTEX_)
+#if defined (_DEBUG_SHOW_MUTEX_)
     printf("**************************************** [MutexUnlock] mutex(0x%08x) is about to unlock from this task(%d)\n", mutex, currentTask->timeQuantum);
 #endif // DEBUG
 
@@ -63,7 +63,7 @@ int MutexUnlock(struct MutexStruct *mutex) {
 
     IntRestoreIRQ(flag);
 
-#if defined (_DEBUG_SHOW_SEMAPHORE_USING_MUTEX_)
+#if defined (_DEBUG_SHOW_MUTEX_)
     printf("**************************************** [MutexUnlock] mutex(0x%08x) is unlocked\n", mutex);
 #endif // DEBUG
 
