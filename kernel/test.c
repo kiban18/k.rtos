@@ -8,14 +8,20 @@
 #include <semaphore.h>
 
 
+//#define USE_LONG_COUNT
+#ifdef USE_LONG_COUNT
 #define LONG_DELAY_LOOP_COUNT   0x8fffffffu
 #define SHORT_DELAY_LOOP_COUNT  0x08ffffffu
+#else // SHORT_COUNT
+#define LONG_DELAY_LOOP_COUNT   0x4fffffffu
+#define SHORT_DELAY_LOOP_COUNT  0x04ffffffu
+#endif
 
-#define TIMER_INTERVAL_0    55
-#define TIMER_INTERVAL_1    13
-#define TIMER_INTERVAL_2    36
-#define TIMER_INTERVAL_3    25
-#define TIMER_INTERVAL_4    10
+#define TIMER_INTERVAL_0    40
+#define TIMER_INTERVAL_1    31
+#define TIMER_INTERVAL_2    22
+#define TIMER_INTERVAL_3    13
+#define TIMER_INTERVAL_4    4
 
 #define TASK_QUANTUM_0      5
 #define TASK_QUANTUM_1      7
@@ -46,10 +52,10 @@ struct TimerStruct timer0, timer1, timer2, timer3, timer4;
 
 int Task0Main(void *args) {
     while (1) {
-#if defined(_SHOW_TASK_SCHED_BY_YIELD_)
+//#if defined(_SHOW_TASK_SCHED_BY_YIELD_)
         unsigned int loop;
         for (loop=SHORT_DELAY_LOOP_COUNT; loop>0; loop--);
-#endif
+//#endif
 
         printf("\n[Task0Main] running\n");
 #if defined(_SHOW_TASK_SCHED_BY_YIELD_)
@@ -63,12 +69,12 @@ int Task0Main(void *args) {
 
 int Task1Main(void *args) {
     while (1) {
-#if defined(_SHOW_TASK_SCHED_BY_YIELD_)
+//#if defined(_SHOW_TASK_SCHED_BY_YIELD_)
         unsigned int loop;
         for (loop=SHORT_DELAY_LOOP_COUNT; loop>0; loop--);
-#endif
+//#endif
 
-        printf("\n[TaskMain] running\n");
+        printf("\n[Task1Main] running\n");
 #if defined(_SHOW_TASK_SCHED_BY_YIELD_)
         TaskYield();
 #endif
@@ -80,10 +86,10 @@ int Task1Main(void *args) {
 
 int Task2Main(void *args) {
     while (1) {
-#if defined(_SHOW_TASK_SCHED_BY_YIELD_)
+//#if defined(_SHOW_TASK_SCHED_BY_YIELD_)
         unsigned int loop;
         for (loop=SHORT_DELAY_LOOP_COUNT; loop>0; loop--);
-#endif
+//#endif
 
         printf("\n[Task2Main] running\n");
 #if defined(_SHOW_TASK_SCHED_BY_YIELD_)
@@ -200,37 +206,37 @@ int Task5Main(void *args) {
     printf("[Task5Main] task(%d) started\n", task5.timeQuantum);
     while (1) {
 #if defined(_DEBUG_SHOW_SEMAPHORE_)
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-        printf("@@ [Task5Main] To SemaTake!!!\n");
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+        printf("########################################\n");
+        printf("## [Task5Main] To SemaTake!!!\n");
+        printf("########################################\n");
 #endif // DEBUG
         SemaTake(&gSema);
 #if defined(_DEBUG_SHOW_SEMAPHORE_)
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-        printf("@@ [Task5Main] SemaTook!!!\n");
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+        printf("########################################\n");
+        printf("## [Task5Main] SemaTook!!!\n");
+        printf("########################################\n");
 #endif // DEBUG
 
         globalData4TestSemaphore++;
 #if defined(_DEBUG_SHOW_SEMAPHORE_)
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-        printf("@@ [Task5Main] ************************* globalData4TestSemaphore increased to %d\n",
+        printf("########################################\n");
+        printf("## [Task5Main] ************************* globalData4TestSemaphore increased to %d\n",
                 globalData4TestSemaphore);
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+        printf("########################################\n");
 #endif // DEBUG
 
         for (loop=LONG_DELAY_LOOP_COUNT; loop>0; loop--);
 
 #if defined(_DEBUG_SHOW_SEMAPHORE_)
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-        printf("@@ [Task5Main] To SemaGive!!!\n");
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+        printf("########################################\n");
+        printf("## [Task5Main] To SemaGive!!!\n");
+        printf("########################################\n");
 #endif // DEBUG
         SemaGive(&gSema);
 #if defined(_DEBUG_SHOW_SEMAPHORE_)
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-        printf("@@ [Task5Main] SemaGave!!!\n");
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+        printf("########################################\n");
+        printf("## [Task5Main] SemaGave!!!\n");
+        printf("########################################\n");
 #endif // DEBUG
 
         for (loop=LONG_DELAY_LOOP_COUNT; loop>0; loop--);
@@ -296,37 +302,37 @@ int Task7Main(void *args) {
     printf("[Task7Main] task(%d) started\n", task7.timeQuantum);
     while (1) {
 #if defined(_DEBUG_SHOW_SEMAPHORE_)
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-        printf("@@ [Task7Main] To SemaTake!!!\n");
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+        printf("++++++++++++++++++++++++++++++++++++++++\n");
+        printf("++ [Task7Main] To SemaTake!!!\n");
+        printf("++++++++++++++++++++++++++++++++++++++++\n");
 #endif // DEBUG
         SemaTake(&gSema);
 #if defined(_DEBUG_SHOW_SEMAPHORE_)
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-        printf("@@ [Task7Main] SemaTook!!!\n");
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+        printf("++++++++++++++++++++++++++++++++++++++++\n");
+        printf("++ [Task7Main] SemaTook!!!\n");
+        printf("++++++++++++++++++++++++++++++++++++++++\n");
 #endif // DEBUG
 
         globalData4TestSemaphore++;
 #if defined(_DEBUG_SHOW_SEMAPHORE_)
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-        printf("@@ [Task7Main] ************************* globalData4TestSemaphore increased to %d\n",
+        printf("++++++++++++++++++++++++++++++++++++++++\n");
+        printf("++ [Task7Main] ************************* globalData4TestSemaphore increased to %d\n",
                 globalData4TestSemaphore);
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+        printf("++++++++++++++++++++++++++++++++++++++++\n");
 #endif // DEBUG
 
         for (loop=LONG_DELAY_LOOP_COUNT; loop>0; loop--);
 
 #if defined(_DEBUG_SHOW_SEMAPHORE_)
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-        printf("@@ [Task7Main] To SemaGive!!!\n");
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+        printf("++++++++++++++++++++++++++++++++++++++++\n");
+        printf("++ [Task7Main] To SemaGive!!!\n");
+        printf("++++++++++++++++++++++++++++++++++++++++\n");
 #endif // DEBUG
         SemaGive(&gSema);
 #if defined(_DEBUG_SHOW_SEMAPHORE_)
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
-        printf("@@ [Task7Main] SemaGave!!!\n");
-        printf("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@\n");
+        printf("++++++++++++++++++++++++++++++++++++++++\n");
+        printf("++ [Task7Main] SemaGave!!!\n");
+        printf("++++++++++++++++++++++++++++++++++++++++\n");
 #endif // DEBUG
 
         for (loop=LONG_DELAY_LOOP_COUNT; loop>0; loop--);
